@@ -20,70 +20,89 @@ const { NotImplementedError } = require("../extensions/index.js");
  *
  */
 class VigenereCipheringMachine {
-  #alfavit = [
-    "a",
-    "b",
-    "c",
-    "d",
-    "e",
-    "f",
-    "g",
-    "h",
-    "i",
-    "j",
-    "k",
-    "l",
-    "m",
-    "n",
-    "o",
-    "p",
-    "q",
-    "r",
-    "s",
-    "t",
-    "u",
-    "v",
-    "w",
-    "x",
-    "y",
-    "z",
-  ];
   #typeMachine;
-  constructor(typeMachine) {
+  #alfavit = [];
+  constructor(typeMachine = "") {
     this.typeMachine = typeMachine;
+    this.alfavit = [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f",
+      "g",
+      "h",
+      "i",
+      "j",
+      "k",
+      "l",
+      "m",
+      "n",
+      "o",
+      "p",
+      "q",
+      "r",
+      "s",
+      "t",
+      "u",
+      "v",
+      "w",
+      "x",
+      "y",
+      "z",
+    ];
   }
   encrypt(message, key) {
     if (!message || !key) {
       throw new Error("Incorrect arguments!");
     }
-    array = [];
-    //throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
-    keyCode = keyToNumbers(key, message.length);
+    let array = [];
+    let keyCode = this.keyToNumbers(key.toLowerCase(), message.length);
+    let j = 0;
     for (let i = 0; i < message.length; i++) {
       let aaa = message.toLowerCase()[i];
-      let bbb = alfavit.indexOf(aaa);
+      let bbb = this.alfavit.indexOf(aaa);
       if (bbb === -1) {
         array.push(aaa);
       } else {
-        array.push(alfavit[alfabetUp(keyCode[i], alfavit.indexOf(aaa))]);
+        let vvv = this.alfabetUp(this.alfavit.indexOf(aaa), keyCode[j++]);
+        array.push(vvv);
       }
     }
+
+    if (this.typeMachine || this.typeMachine === "") {
+      return array.join("").toUpperCase();
+    } else return array.reverse().join("").toUpperCase();
   }
 
   decrypt(encryptedMessage, key) {
-    if (!message || !kay) {
+    if (!encryptedMessage || !key) {
       throw new Error("Incorrect arguments!");
     }
-    //throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    let array = [];
+    let keyCode = this.keyToNumbers(key.toLowerCase(), encryptedMessage.length);
+    let j = 0;
+    for (let i = 0; i < encryptedMessage.length; i++) {
+      let aaa = encryptedMessage.toLowerCase()[i];
+      let bbb = this.alfavit.indexOf(aaa);
+      if (bbb === -1) {
+        array.push(aaa);
+      } else {
+        let vvv = this.alfabetDown(this.alfavit.indexOf(aaa), keyCode[j++]);
+        array.push(vvv);
+      }
+    }
+    if (this.typeMachine || this.typeMachine === "") {
+      return array.join("").toUpperCase();
+    } else return array.reverse().join("").toUpperCase();
   }
 
-  #keyToNumbers(key, lenghtText) {
+  keyToNumbers(key, lenghtText) {
     let array = [];
     let j = 0;
     for (let i = 0; i < lenghtText; i++) {
-      let ind = alfavit.indexOf(key[j]);
+      let ind = this.alfavit.indexOf(key[j]);
       array.push(ind);
       j++;
       if (j === key.length) {
@@ -93,9 +112,16 @@ class VigenereCipheringMachine {
     return array;
   }
 
-  #alfabetUp(key, mess) {
-    let fff = (mess + key) % alfavit.length;
-    return alfavit[fff];
+  alfabetUp(mess, key) {
+    let rr = mess + key > 25 ? mess + key - 26 : mess + key;
+    return this.alfavit[rr];
+    // let fff = (mess + key) % this.alfavit.length;
+    // return this.alfavit[fff];
+  }
+
+  alfabetDown(mess, key) {
+    let rr = mess - key < 0 ? mess - key + 26 : mess - key;
+    return this.alfavit[rr];
   }
 }
 
