@@ -18,10 +18,16 @@ const chainMaker = {
   },
 
   removeLink(position) {
-    if (!Number.isInteger(position) || position >= chain.length || position < 0)
+    if (
+      !Number.isInteger(position) ||
+      position >= chain.length ||
+      position <= 0
+    ) {
+      chain = [];
       throw new Error("You can't remove incorrect link!");
-    chain.splice(position - 1, 1);
+    }
 
+    chain.splice(position - 1, 1);
     return this;
   },
 
